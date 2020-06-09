@@ -5,9 +5,6 @@ package io.prometheus.wls.rest;
  * Licensed under the Universal Permissive License v 1.0 as shown at http://oss.oracle.com/licenses/upl.
  */
 
-import static io.prometheus.wls.rest.domain.MapUtils.isNullOrEmptyString;
-
-import io.prometheus.wls.rest.domain.MBeanSelector;
 import java.io.IOException;
 import java.util.Map;
 import java.util.TreeMap;
@@ -16,6 +13,10 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import io.prometheus.wls.rest.domain.MBeanSelector;
+
+import static io.prometheus.wls.rest.domain.MapUtils.isNullOrEmptyString;
 
 /**
  * The servlet which produces the exported metrics.
@@ -87,7 +88,7 @@ public class ExporterServlet extends PassThroughAuthenticationServlet {
     private Map<String, Object> getMetrics(WebClient webClient, MBeanSelector selector) throws IOException {
         String request = selector.getRequest();
         String jsonResponse = webClient.withUrl(LiveConfiguration.getUrl(selector)).doPostRequest(request);
-        MessagesServlet.addExchange(request, jsonResponse);
+        MessagesServlet.addExchange(LiveConfiguration.getUrl(selector), request, jsonResponse);
         if (isNullOrEmptyString(jsonResponse)) return null;
 
         return LiveConfiguration.scrapeMetrics(selector, jsonResponse);

@@ -15,6 +15,7 @@ import com.meterware.pseudoserver.HttpUserAgentTest;
 import com.meterware.pseudoserver.PseudoServlet;
 import com.meterware.pseudoserver.WebResource;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static io.prometheus.wls.rest.ServletConstants.AUTHENTICATION_HEADER;
@@ -51,6 +52,7 @@ public class WebClientImplTest extends HttpUserAgentTest {
         sentHeaders.clear();
     }
 
+    @Ignore("seems to be unreliable on some machines")
     @Test(expected = WebClientException.class)
     public void whenUnableToReachHost_throwException() throws Exception {
         factory.createClient().withUrl(UNDEFINED_HOST_URL).doGetRequest();
